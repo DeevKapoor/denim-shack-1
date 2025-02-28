@@ -1,16 +1,17 @@
-"use client"
-import Link from "next/link"
-import Image from "next/image"
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "../components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 
 interface MegaMenuProps {
-  trigger: string
+  trigger: string;
 }
 
 export function MegaMenu({ trigger }: MegaMenuProps) {
@@ -20,7 +21,7 @@ export function MegaMenu({ trigger }: MegaMenuProps) {
         <NavigationMenuItem>
           <NavigationMenuTrigger className="text-sm font-medium">{trigger}</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid grid-cols-4 w-[800px] gap-4 p-6">
+            <div className="grid grid-cols-4 w-[800px] gap-4 p-6 bg-white rounded-lg shadow-lg">
               <div className="space-y-4">
                 <h3 className="font-bold">New & Featured</h3>
                 <ul className="space-y-2 text-sm">
@@ -77,7 +78,7 @@ export function MegaMenu({ trigger }: MegaMenuProps) {
                   <Link href="/new-collection" className="group">
                     <div className="relative aspect-[4/5] overflow-hidden rounded-lg">
                       <Image
-                        src="/placeholder.svg"
+                        src="/new-collection.jpg"
                         alt="New Collection"
                         fill
                         className="object-cover transition-transform group-hover:scale-105"
@@ -89,7 +90,7 @@ export function MegaMenu({ trigger }: MegaMenuProps) {
                   <Link href="/premium-denim" className="group">
                     <div className="relative aspect-[4/5] overflow-hidden rounded-lg">
                       <Image
-                        src="/placeholder.svg"
+                        src="/premium-denim.jpg"
                         alt="Premium Denim"
                         fill
                         className="object-cover transition-transform group-hover:scale-105"
@@ -105,5 +106,5 @@ export function MegaMenu({ trigger }: MegaMenuProps) {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
-  )
+  );
 }

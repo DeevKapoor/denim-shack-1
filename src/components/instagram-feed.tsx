@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { motion } from "framer-motion"
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const posts = [
   {
@@ -40,7 +40,7 @@ const posts = [
     likes: "1.9k",
     comments: "78",
   },
-]
+];
 
 export function InstagramFeed() {
   return (
@@ -75,6 +75,5 @@ export function InstagramFeed() {
         </motion.a>
       ))}
     </div>
-  )
+  );
 }
-

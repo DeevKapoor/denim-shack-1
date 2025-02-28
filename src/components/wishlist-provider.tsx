@@ -1,104 +1,67 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-interface Product {
-  id: string
-  name: string
-  price: number
-  image: string
-  category: string
-}
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { Product } from "@/types/product";
 
 interface WishlistContextType {
-  items: Product[]
-  wishlistCount: number
-  addToWishlist: (product: Product) => void
-  removeFromWishlist: (productId: string) => void
-  isInWishlist: (productId: string) => boolean
-  clearWishlist: () => void
-  toggleWishlist: (product: Product) => void
+  items: Product[];
+  addItem: (product: Product) => void;
+  removeItem: (productId: string) => void;
+  clearItems: () => void;
+  wishlistCount: number;
 }
 
-const WishlistContext = React.createContext<WishlistContextType | undefined>(undefined)
+const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
-const WISHLIST_STORAGE_KEY = "denim-shack-wishlist"
+export const useWishlist = () => {
+  const context = useContext(WishlistContext);
+  if (!context) {
+    throw new Error("useWishlist must be used within a WishlistProvider");
+  }
+  return context;
+};
 
-export function WishlistProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = React.useState<Product[]>(() => {
-    const savedWishlist = typeof window !== 'undefined' ? localStorage.getItem(WISHLIST_STORAGE_KEY) : null
-    return savedWishlist ? JSON.parse(savedWishlist) : []
-  })
+export const WishlistProvider = ({ children }: { children: ReactNode }) => {
+  const [items, setItems] = useState<Product[]>(() => {
+    if (typeof window !== "undefined") {
+      const storedItems = localStorage.getItem("wishlist-items");
+      return storedItems ? JSON.parse(storedItems) : [];
+    }
+    return [];
+  });
 
-  const wishlistCount = items.length
+  useEffect(() => {
+    localStorage.setItem("wishlist-items", JSON.stringify(items));
+  }, [items]);
 
-  React.useEffect(() => {
-    localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(items))
-  }, [items])
-
-  const addToWishlist = React.useCallback((product: Product) => {
-    setItems((prev) => {
-      if (prev.some(item => item.id === product.id)) {
-        return prev
+  const addItem = (product: Product) => {
+    setItems((prevItems) => {
+      if (prevItems.find((item) => item.id === product.id)) {
+        return prevItems;
       }
-      return [...prev, product]
-    })
-  }, [])
+      return [...prevItems, product];
+    });
+  };
 
-  const removeFromWishlist = React.useCallback((productId: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== productId))
-  }, [])
+  const removeItem = (productId: string) => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== Number(productId)));
+  };
 
-  const isInWishlist = React.useCallback((productId: string) => {
-    return items.some((item) => item.id === productId)
-  }, [items])
-
-  const clearWishlist = React.useCallback(() => {
-    setItems([])
-  }, [])
-
-  const toggleWishlist = React.useCallback((product: Product) => {
-    setItems((prev) => {
-      const exists = prev.some(item => item.id === product.id)
-      if (exists) {
-        return prev.filter(item => item.id !== product.id)
-      }
-      return [...prev, product]
-    })
-  }, [])
-
-  const value = React.useMemo(() => ({
-    items,
-    wishlistCount,
-    addToWishlist,
-    removeFromWishlist,
-    isInWishlist,
-    clearWishlist,
-    toggleWishlist,
-  }), [items, wishlistCount, addToWishlist, removeFromWishlist, isInWishlist, clearWishlist, toggleWishlist])
+  const clearItems = () => {
+    setItems([]);
+  };
 
   return (
-    <WishlistContext.Provider value={value}>
+    <WishlistContext.Provider
+      value={{
+        items,
+        addItem,
+        removeItem,
+        clearItems,
+        wishlistCount: items.length,
+      }}
+    >
       {children}
     </WishlistContext.Provider>
-  )
-}
-
-export function useWishlist() {
-  const context = React.useContext(WishlistContext)
-  if (context === undefined) {
-    throw new Error("useWishlist must be used within a WishlistProvider")
-  }
-  return context
-}
-
-export function useWishlistItem(product: Product) {
-  const { isInWishlist, toggleWishlist } = useWishlist()
-  
-  const inWishlist = isInWishlist(product.id)
-  const toggle = React.useCallback(() => {
-    toggleWishlist(product)
-  }, [product, toggleWishlist])
-
-  return { inWishlist, toggle }
-}
+  );
+};

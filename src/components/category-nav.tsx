@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import Link from "next/link"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "../components/ui/button"
+import { useRef } from "react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const categories = ["New", "Trending", "Jeans", "Dresses", "Tops", "Shirts", "Jackets", "Accessories", "Shoes", "Sale"]
+const categories = ["New", "Trending", "Jeans", "Dresses", "Tops", "Shirts", "Jackets", "Accessories", "Shoes", "Sale"];
 
 export function CategoryNav() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
-    const container = scrollContainerRef.current
-    if (!container) return
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-    const scrollAmount = direction === "left" ? -200 : 200
-    container.scrollBy({ left: scrollAmount, behavior: "smooth" })
-  }
+    const scrollAmount = direction === "left" ? -200 : 200;
+    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  };
 
   return (
     <div className="relative border-y bg-muted/50">
@@ -40,5 +40,5 @@ export function CategoryNav() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

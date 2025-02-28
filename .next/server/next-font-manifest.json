@@ -1,0 +1,25 @@
+{
+  "app": {
+    "[project]/src/app/wishlist/page": [
+      "static/media/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU-s.p.09fcb0cf.woff2"
+    ],
+    "[project]/src/app/page": [
+      "static/media/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU-s.p.09fcb0cf.woff2"
+    ],
+    "[project]/src/app/_not-found/page": [
+      "static/media/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU-s.p.09fcb0cf.woff2"
+    ],
+    "[project]/src/app/men/page": [
+      "static/media/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU-s.p.09fcb0cf.woff2"
+    ],
+    "[project]/src/app/account/page": [
+      "static/media/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU-s.p.09fcb0cf.woff2"
+    ],
+    "[project]/src/app/sale/page": [
+      "static/media/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU-s.p.09fcb0cf.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

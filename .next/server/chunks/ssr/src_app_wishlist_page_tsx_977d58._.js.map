@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/deevanshu/OneDrive/Desktop/ds/denim-shack-1/src/app/wishlist/page.tsx"],"sourcesContent":["\"use client\";\r\n\r\nimport React from \"react\";\r\nimport { useWishlist } from \"@/components/wishlist-provider\";\r\nimport { ProductCard } from \"@/components/product-card\";\r\nimport { Wishlist } from \"@/components/Wishlist\";\r\n\r\nexport default function WishlistPage() {\r\n  return <Wishlist />;\r\n}"],"names":[],"mappings":";;;;;;;;;AAAA;;;AAOe,SAAS;IACtB,qBAAO,8OAAC;;;;;AACV"}},
+    {"offset": {"line": 26, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

@@ -1,18 +1,14 @@
-"use client"
+import { useEffect } from "react";
+import { toast, Toaster as HotToaster } from "react-hot-toast";
 
-import React from 'react'
-import { useToast } from './use-toast'
+export const useToast = () => ({
+  add: (message: string) => toast(message),
+});
 
 export const Toaster = () => {
-  const { toasts, dismiss } = useToast()
+  useEffect(() => {
+    toast("Welcome to Denim Shack!");
+  }, []);
 
-  return (
-    <div>
-      {toasts.map((toast) => (
-        <div key={toast.id} onClick={() => dismiss(toast.id)}>
-          {toast.message}
-        </div>
-      ))}
-    </div>
-  )
-}
+  return <HotToaster />;
+};

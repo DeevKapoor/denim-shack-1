@@ -1,54 +1,60 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { Product } from "@/types/product";
 
 interface RecentlyViewedContextType {
-  recentlyViewed: string[]
-  addToRecentlyViewed: (productId: string) => void
-  clearRecentlyViewed: () => void
+  items: Product[];
+  addItem: (product: Product) => void;
+  clearItems: () => void;
 }
 
-const RecentlyViewedContext = createContext<RecentlyViewedContextType | undefined>(
-  undefined
-)
+const RecentlyViewedContext = createContext<RecentlyViewedContextType | undefined>(undefined);
 
-export function RecentlyViewedProvider({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const [recentlyViewed, setRecentlyViewed] = useState<string[]>([])
-
-  const addToRecentlyViewed = (productId: string) => {
-    setRecentlyViewed((prev) => {
-      const filtered = prev.filter((id) => id !== productId)
-      return [productId, ...filtered].slice(0, 10) 
-    })
+export const useRecentlyViewed = () => {
+  const context = useContext(RecentlyViewedContext);
+  if (!context) {
+    throw new Error("useRecentlyViewed must be used within a RecentlyViewedProvider");
   }
+  return context;
+};
 
-  const clearRecentlyViewed = () => {
-    setRecentlyViewed([])
-  }
+export const RecentlyViewedProvider = ({ children }: { children: ReactNode }) => {
+  const [items, setItems] = useState<Product[]>(() => {
+    if (typeof window !== "undefined") {
+      const storedItems = localStorage.getItem("recently-viewed-items");
+      return storedItems ? JSON.parse(storedItems) : [];
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("recently-viewed-items", JSON.stringify(items));
+  }, [items]);
+
+  const addItem = (product: Product) => {
+    setItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prevItems;
+      }
+      return [...prevItems, { ...product }];
+    });
+  };
+
+  const clearItems = () => {
+    setItems([]);
+  };
 
   return (
     <RecentlyViewedContext.Provider
       value={{
-        recentlyViewed,
-        addToRecentlyViewed,
-        clearRecentlyViewed,
+        items,
+        addItem,
+        clearItems,
       }}
     >
       {children}
     </RecentlyViewedContext.Provider>
-  )
-}
-
-export function useRecentlyViewed() {
-  const context = useContext(RecentlyViewedContext)
-  if (context === undefined) {
-    throw new Error(
-      "useRecentlyViewed must be used within a RecentlyViewedProvider"
-    )
-  }
-  return context
-}
+  );
+};

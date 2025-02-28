@@ -1,46 +1,60 @@
-"use client"
+"use client";
 
-import { useState, useEffect, ReactElement } from "react"
-import Link from "next/link"
-import { Menu, Search, ShoppingBag, User, Heart, X } from "lucide-react"
-import { Button } from "../components/ui/button"
-import { Input } from "../components/ui/input"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet"
-import { MegaMenu } from "@/components/mega-menu"
-import { useWishlist } from "@/components/wishlist-provider"
-import { cn } from "@/lib/utils"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect, ReactElement } from "react";
+import Link from "next/link";
+import { Menu, Search, ShoppingBag, User, Heart, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { MegaMenu } from "@/components/mega-menu";
+import { useWishlist } from "@/components/wishlist-provider";
+import { useCart } from "@/components/cart-provider";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CartSheetProps {
   children: ({ open }: { open: () => void }) => ReactElement;
 }
-const CartSheet = ({ children }: CartSheetProps) => {
-  const open = () => {
-  };
 
-  return children({ open });
+const CartSheet = ({ children }: CartSheetProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const open = () => setIsOpen(true);
+
+  return (
+    <>
+      {children({ open })}
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side="right" className="w-[300px] sm:w-[350px]">
+          <SheetHeader>
+            <SheetTitle>Shopping Cart</SheetTitle>
+          </SheetHeader>
+          <p>Your cart items go here.</p>
+        </SheetContent>
+      </Sheet>
+    </>
+  );
 };
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const { cartCount } = useLocalCartLocal()
-  const { wishlistCount } = useWishlist()
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { totalItems: cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
-        isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-background",
+        isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-background"
       )}
     >
       {/* Announcement Bar */}
@@ -156,13 +170,13 @@ export function Header() {
               <Search className="h-5 w-5" />
               <span className="sr-only">Search</span>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
+            <Button variant="ghost" size="icon">
               <Link href="/account">
                 <User className="h-5 w-5" />
                 <span className="sr-only">Account</span>
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" asChild className="relative">
+            <Button variant="ghost" size="icon" className="relative">
               <Link href="/wishlist">
                 <Heart className="h-5 w-5" />
                 {wishlistCount > 0 && (
@@ -190,12 +204,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
-}
-
-export default function useLocalCartLocal() {
-
-  return {
-    cartCount: 0,
-  }
+  );
 }
